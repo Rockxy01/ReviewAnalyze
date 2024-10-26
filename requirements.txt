@@ -7,4 +7,3 @@ textblob
 Flask
 gunicorn
 webdriver_manager
-WebDriver
