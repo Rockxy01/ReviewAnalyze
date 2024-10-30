@@ -44,7 +44,7 @@ class AmazonReviewAnalyzer:
                 chrome_options.add_argument(f'user-agent={self.ua.random}')
                 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
                 
-                service = Service('/usr/bin/chromedriver')
+                service = Service(ChromeDriverManager().install())
                 self.driver = webdriver.Chrome(service=service, options=chrome_options)
                 logger.info("Selenium WebDriver initialized successfully")
                 return True
