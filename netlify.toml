@@ -1,3 +1,10 @@
 [build]
-  functions = "functions"
-  publish = "templates"
+  publish = "templates"  # Directory to publish, adjust if needed
+  command = ""  # No build command needed for static sites
+
+[[redirects]]
+  from = "/analyze"  # Redirects requests from this path
+  to = "https://reviewanalyzer.onrender.com/analyze"  # Replace with your Flask API URL
+  status = 200
+  force = true
+
