@@ -1,8 +1,3 @@
 [build]
-  publish = "public"  # Change this if your HTML file is in a different directory
-  command = "npm run build"  # Optional, only if you have a build command
-
-[[redirects]]
-  from = "/templates"
-  to = "/index.html"
-  status = 200
+  functions = "functions"
+  publish = "templates"
