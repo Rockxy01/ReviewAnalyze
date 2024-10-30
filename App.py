@@ -33,25 +33,40 @@ class AmazonReviewAnalyzer:
         self.driver = None
 
     def setup_selenium(self, retries=3):
-        """Initialize Selenium WebDriver with appropriate options"""
-        for attempt in range(retries):
-            try:
-                chrome_options = Options()
-                chrome_options.add_argument('--headless')
-                chrome_options.add_argument('--disable-gpu')
-                chrome_options.add_argument('--no-sandbox')
-                chrome_options.add_argument('--disable-dev-shm-usage')
-                chrome_options.add_argument(f'user-agent={self.ua.random}')
-                chrome_options.add_argument('--disable-blink-features=AutomationControlled')
-                
+    """Initialize Selenium WebDriver with appropriate options"""
+    for attempt in range(retries):
+        try:
+            chrome_options = Options()
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument(f'user-agent={self.ua.random}')
+            chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+            chrome_options.add_argument('--window-size=1920,1080')
+            
+            # Set binary location for Render environment
+            if os.environ.get('IS_RENDER'):
+                logger.info("Running in Render environment")
+                chrome_options.binary_location = '/usr/bin/google-chrome-stable'
+                service = Service('/usr/bin/chromedriver')
+            else:
+                logger.info("Running in local environment")
                 service = Service(ChromeDriverManager().install())
-                self.driver = webdriver.Chrome(service=service, options=chrome_options)
-                logger.info("Selenium WebDriver initialized successfully")
-                return True
-            except Exception as e:
-                logger.error(f"Error setting up Selenium (attempt {attempt+1}/{retries}): {e}")
+            
+            self.driver = webdriver.Chrome(service=service, options=chrome_options)
+            logger.info("Selenium WebDriver initialized successfully")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error setting up Selenium (attempt {attempt+1}/{retries}): {e}")
+            # Log more detailed error information
+            logger.error(f"Full error details: {str(e)}")
+            if attempt < retries - 1:  # Only sleep if we're going to retry
                 time.sleep(2)  # Wait before retrying
-        return False
+    
+    logger.error("Failed to initialize Selenium after all attempts")
+    return False
 
     def get_product_image(self, url):
         """Fetch the product image URL using Selenium"""
