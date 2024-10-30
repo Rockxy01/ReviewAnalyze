@@ -76,7 +76,7 @@ class AmazonReviewAnalyzer:
             img_element = None
             for selector_type, selector in image_selectors:
                 try:
-                    img_element = WebDriverWait(self.driver, 3).until(
+                    img_element = WebDriverWait(self.driver, 20).until(
                         EC.presence_of_element_located((selector_type, selector))
                     )
                     if img_element:
@@ -140,7 +140,7 @@ class AmazonReviewAnalyzer:
                     self.driver.get(page_url)
 
                     # Wait for reviews to load
-                    WebDriverWait(self.driver, 30).until(  # Increased timeout
+                    WebDriverWait(self.driver, 20).until(  # Increased timeout
                         EC.presence_of_element_located((By.CLASS_NAME, "review"))
                     )
 
@@ -182,7 +182,7 @@ class AmazonReviewAnalyzer:
         try:
             domain, asin = self.clean_url(url)
             self.driver.get(url)
-            product_title = WebDriverWait(self.driver, 10).until(
+            product_title = WebDriverWait(self.driver, 20).until(
                 EC.presence_of_element_located((By.ID, "productTitle"))
             ).text.strip()
         except:
