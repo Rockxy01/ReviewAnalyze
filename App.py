@@ -43,8 +43,7 @@ class AmazonReviewAnalyzer:
                 chrome_options.add_argument('--disable-dev-shm-usage')
                 chrome_options.add_argument(f'user-agent={self.ua.random}')
                 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
-                options.add_argument("--disable-gpu")
-                options.add_argument("--window-size=1920,1080")
+                
                 
                 service = Service(ChromeDriverManager().install())
                 self.driver = webdriver.Chrome(service=service, options=chrome_options)
