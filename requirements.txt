@@ -5,6 +5,6 @@ fake-useragent
 selenium
 textblob
 Flask
-gunicorn
+Gunicorn
 webdriver_manager
 chromedriver
