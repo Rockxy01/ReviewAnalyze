@@ -8,4 +8,4 @@ Flask
 gunicorn
 webdriver_manager
 chromedriver
-PIL
+Pillow
