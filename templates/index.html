@@ -52,6 +52,7 @@
         
         #result-container {
             margin-top: 20px;
+            display: none; /* Hide the result container initially */
         }
         
         #result-header {
@@ -59,7 +60,20 @@
             margin-bottom: 10px;
         }
         
+        #product-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
         #result-summary {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        #result-sentiment {
             font-size: 18px;
             margin-bottom: 20px;
         }
@@ -67,13 +81,6 @@
         #result-reviews {
             font-size: 18px;
             margin-bottom: 20px;
-        }
-        
-        #product-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
         }
     </style>
 </head>
@@ -87,11 +94,9 @@
             <button id="analyze-btn">Analyze Reviews</button>
         </form>
         <div id="result-container">
-            <div id="result-header">
-                <h2 id="product-title"></h2>
-            </div>
-            <img id="product-image" src="">
+            <img id="product-image" src="" alt="Product Image">
             <div id="result-summary"></div>
+            <div id="result-sentiment"></div>
             <div id="result-reviews"></div>
         </div>
     </div>
@@ -101,9 +106,9 @@
         const productUrlInput = document.getElementById('product-url-input');
         const analyzeBtn = document.getElementById('analyze-btn');
         const resultContainer = document.getElementById('result-container');
-        const productTitle = document.getElementById('product-title');
         const productImage = document.getElementById('product-image');
         const resultSummary = document.getElementById('result-summary');
+        const resultSentiment = document.getElementById('result-sentiment');
         const resultReviews = document.getElementById('result-reviews');
 
         analyzeForm.addEventListener('submit', (e) => {
@@ -121,26 +126,32 @@
                 .then((data) => {
                     if (data.success) {
                         const summary = data.summary;
+                        const sentiment = data.sentiment;
                         const reviews = data.reviews;
-                        const title = data.title;
-                        const imageUrl = data.image_url;
+                        const image_url = data.image_url;
 
-                        productTitle.innerText = title;
-                        productImage.src = imageUrl;
+                        productImage.src = image_url;
                         resultSummary.innerHTML = `
                             <h3>Summary:</h3>
                             <p>${summary}</p>
                         `;
-
+                        resultSentiment.innerHTML = `
+                            <h3>Sentiment Score:</h3>
+                            <p>${sentiment.toFixed(2)}</p>
+                        `;
                         resultReviews.innerHTML = `
                             <h3>Reviews:</h3>
-                            ${reviews.map((review) => `
+                            ${reviews.map((review, index) => `
                                 <div>
+                                    <p>Review ${index + 1}:</p>
                                     <p>Rating: ${review.Rating}</p>
                                     <p>Review: ${review.Review}</p>
                                 </div>
                             `).join('')}
                         `;
+
+                        // Show the result container
+                        resultContainer.style.display = 'block';
                     } else {
                         alert(`Error: ${data.error}`);
                     }
