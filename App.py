@@ -24,9 +24,6 @@ def setup_driver():
     options = Options()
     options.add_argument("--headless")  # run in headless mode (no UI)
     options.add_argument(f"user-agent={get_random_user_agent()}")
-    chrome_options.binary_location = "/usr/bin/chromium-browser"
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage') 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
 
@@ -238,7 +235,7 @@ def analyze_sentiment(reviews):
 
 # Routes
 @app.route('/')
-def index():
+def home():
     return render_template('index.html')
 
 @app.route('/analyze', methods=['POST'])
@@ -274,7 +271,7 @@ def analyze_reviews():
             'reviews': review_summary,
             'sentiment': sentiment,
             'summary': summary,
-            'image_url': image_url
+            'image_url': image_url,
         })
     
     except Exception as e:
@@ -284,4 +281,4 @@ def analyze_reviews():
         })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=5500)
