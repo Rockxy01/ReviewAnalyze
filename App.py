@@ -21,6 +21,8 @@ import logging
 
 app = Flask(__name__)
 
+logging.basicConfig(level=logging.DEBUG)
+
 # Function to set up the WebDriver using DevTools
 def setup_driver():
     options = Options()
