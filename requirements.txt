@@ -9,3 +9,4 @@ gunicorn
 webdriver_manager
 chromedriver
 Pillow
+google-chrome-stable
