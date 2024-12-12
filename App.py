@@ -18,6 +18,7 @@ import random
 from urllib.parse import urlparse
 from selenium.webdriver.chrome.service import Service
 import logging
+from webdriver_manager.chrome import ChromeDriverManager
 
 app = Flask(__name__)
 
