@@ -1,51 +1,25 @@
-# Start with a base Python image
 FROM python:3.9-slim
 
-# Install dependencies for Chrome and Selenium
-RUN apt-get update && apt-get install -y \
-    wget \
-    curl \
-    unzip \
-    ca-certificates \
-    fontconfig \
-    libx11-dev \
-    libx11-xcb1 \
-    libxcomposite1 \
-    libxrandr2 \
-    libxdamage1 \
-    libxi6 \
-    libgdk-pixbuf2.0-0 \
-    libnss3 \
-    libgconf-2-4 \
-    libasound2 \
-    libxtst6 \
-    libappindicator3-1 \
-    libxss1 \
-    libgbm-dev \
-    libnspr4 \
-    libudev-dev \
-    libpango1.0-0 \
-    libatk1.0-0 \
-    libgtk-3-0 \
-    google-chrome-stable
+# Install Chrome and dependencies
+RUN apt-get update && apt-get install -y chromium-browser libxss1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6
 
-# Install the chromedriver to match the installed version of Chrome
-RUN wget https://chromedriver.storage.googleapis.com/111.0.5563.64/chromedriver_linux64.zip -P /tmp \
-    && unzip /tmp/chromedriver_linux64.zip -d /usr/local/bin/ \
-    && rm /tmp/chromedriver_linux64.zip
+# Download and install Google Chrome
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && dpkg -i google-chrome-stable_current_amd64.deb && apt-get install -y -f
 
-# Set up the environment
-ENV PATH="/usr/local/bin/chromedriver:$PATH"
-
-# Install Python dependencies
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
-
-# Copy your app code into the container
-COPY . /App
-
-# Set the working directory to your app directory
+# Set working directory to /app
 WORKDIR /App
 
-# Set the command to run your application
-CMD ["python", "App.py"]
+# Copy requirements file
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Expose port
+EXPOSE 5500
+
+# Run command
+CMD ["flask", "run", "--host=0.0.0.0"]
