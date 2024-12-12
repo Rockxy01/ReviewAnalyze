@@ -29,6 +29,7 @@ def setup_driver():
     options = Options()
     options.add_argument("--headless")  # run in headless mode (no UI)
     options.add_argument(f"user-agent={get_random_user_agent()}")
+    options.binary_location = "/usr/bin/google-chrome"
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
