@@ -48,4 +48,4 @@ COPY . /app
 WORKDIR /app
 
 # Set the command to run your application
-CMD ["python", "app.py"]
+CMD ["python", "App.py"]
