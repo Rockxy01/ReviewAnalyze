@@ -33,7 +33,7 @@ def setup_driver():
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-blink-features=AutomationControlled')
     options.add_argument(f"user-agent={get_random_user_agent()}")            
-    #options.binary_location = "/usr/bin/google-chrome"
+    options.binary_location = "/usr/bin/google-chrome"
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
