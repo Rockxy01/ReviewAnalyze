@@ -42,10 +42,10 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Copy your app code into the container
-COPY . /app
+COPY . /App
 
 # Set the working directory to your app directory
-WORKDIR /app
+WORKDIR /App
 
 # Set the command to run your application
 CMD ["python", "App.py"]
