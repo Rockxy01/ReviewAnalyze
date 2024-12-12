@@ -7,5 +7,4 @@ textblob
 Flask
 gunicorn
 webdriver_manager
-chromedriver
 Pillow
