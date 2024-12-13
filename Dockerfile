@@ -1,29 +1,23 @@
-# Base image with Python and minimal Linux tools
 FROM python:3.9-slim
 
-# Install system dependencies (including Chromium and its WebDriver)
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    chromium \
-    chromium-driver \
     wget \
     unzip \
-    && rm -rf /var/lib/apt/lists/*
+    chromium \
+    chromium-driver && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set environment variables for Chrome
-ENV CHROME_BIN=/usr/bin/chromium
-ENV CHROME_DRIVER=/usr/bin/chromedriver
+# Install pip dependencies
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Create a working directory
+# Set environment variables
+ENV PATH="/usr/bin:$PATH"
+
+# Copy app files
+COPY . /App
 WORKDIR /App
 
-# Copy project files
-COPY . /App
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Expose the application port
-EXPOSE 5000
-
-# Run the application
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "App:app"]
+# Run the app
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "App:app"]
