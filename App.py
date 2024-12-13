@@ -89,28 +89,13 @@ def extract_amazon_reviews(url):
         print(f"Error loading reviews: {e}")
         review_elements = []
 
-    # Simulate scrolling to load more reviews
-    last_height = driver.execute_script("return document.body.scrollHeight")
-    while True:
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)
-        new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == last_height:
-            break
-        last_height = new_height
-
-        # Parse page with BeautifulSoup
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        review_elements = soup.find_all('div', {'data-hook': 'review'})
-
-        for review in review_elements:
-            review_text = review.find('span', {'data-hook': 'review-body'})
-            review_rating = review.find('span', {'class': 'a-icon-alt'})
-            if review_text and review_rating:
-                reviews.append({
-                    'text': review_text.text.strip(),
-                    'rating': review_rating.text.strip()
-                })
+    for review in review_elements:
+        review_text = review.find_element(By.CSS_SELECTOR, 'span[data-hook="review-body"]').text.strip()
+        review_rating = review.find_element(By.CSS_SELECTOR, 'span.a-icon-alt').text.strip()
+        reviews.append({
+            'text': review_text,
+            'rating': review_rating
+        })
 
     driver.quit()
     return reviews, image_url
