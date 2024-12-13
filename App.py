@@ -74,7 +74,7 @@ def extract_amazon_reviews(url):
     image_url = None
     try:
         image_element = WebDriverWait(driver, timeout).until(
-            EC.presence_of_element_located((By.ID, 'landingImage'))
+            EC.presence_of_element_located((By.CSS_SELECTOR, '#imgBlkFront'))
         )
         image_url = image_element.get_attribute('src')
     except Exception as e:
