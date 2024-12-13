@@ -19,5 +19,5 @@ ENV PATH="/usr/bin:$PATH"
 COPY . /App
 WORKDIR /App
 
-# Run the app
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "App:app"]
+# Run the app with 4 workers, 2 threads per worker, and a 120-second timeout
+CMD ["gunicorn", "--timeout", "120", "-w", "4", "--threads", "2", "-b", "0.0.0.0:5000", "App:app"]
