@@ -34,7 +34,8 @@ def setup_driver():
     options.add_argument('--disable-blink-features=AutomationControlled')
     options.add_argument(f"user-agent={get_random_user_agent()}")            
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    service = Service("/usr/bin/chromedriver")  # Path to ChromeDriver
+    driver = webdriver.Chrome(service=service, options=options)
     return driver
 
 # Function to get a random user agent
