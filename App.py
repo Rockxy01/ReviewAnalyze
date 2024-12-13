@@ -55,7 +55,7 @@ def extract_amazon_reviews(url):
 
     # Extract product rating
     try:
-        rating = WebDriverWait(driver, timeout).until(
+        rating = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'span.a-icon-alt'))
         ).text.strip()
     except Exception as e:
@@ -63,7 +63,7 @@ def extract_amazon_reviews(url):
     
     # Extract total reviews
     try:
-        total_reviews_element = WebDriverWait(driver, timeout).until(
+        total_reviews_element = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'global ratings') or contains(text(), 'customer reviews')]"))
         )
         total_reviews = total_reviews_element.text.strip()
