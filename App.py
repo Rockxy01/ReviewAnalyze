@@ -80,6 +80,15 @@ def extract_amazon_reviews(url):
 
     reviews = []
 
+    # Wait for reviews to load
+    try:
+        review_elements = WebDriverWait(driver, timeout).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div[data-hook="review"]'))
+        )
+    except Exception as e:
+        print(f"Error loading reviews: {e}")
+        review_elements = []
+
     # Simulate scrolling to load more reviews
     last_height = driver.execute_script("return document.body.scrollHeight")
     while True:
