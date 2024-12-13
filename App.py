@@ -73,31 +73,35 @@ def extract_amazon_reviews(url):
     # Extract product image
     image_url = None
     try:
-        image_element = WebDriverWait(driver, timeout).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '#imgBlkFront'))
-        )
+        image_element = driver.find_element(By.ID, 'landingImage')
         image_url = image_element.get_attribute('src')
     except Exception as e:
         image_url = f"Error fetching image: {e}"
 
     reviews = []
 
-    # Wait for reviews to load
-    try:
-        review_elements = WebDriverWait(driver, timeout).until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, '#reviews-medley .review'))
-        )
-    except Exception as e:
-        print(f"Error loading reviews: {e}")
-        review_elements = []
+    # Simulate scrolling to load more reviews
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    while True:
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            break
+        last_height = new_height
 
-    for review in review_elements:
-        review_text = review.find_element(By.CSS_SELECTOR, 'span.review-text').text.strip()
-        review_rating = review.find_element(By.CSS_SELECTOR, 'span.a-icon-alt').text.strip()
-        reviews.append({
-            'text': review_text,
-            'rating': review_rating
-        })
+        # Parse page with BeautifulSoup
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        review_elements = soup.find_all('div', {'data-hook': 'review'})
+
+        for review in review_elements:
+            review_text = review.find('span', {'data-hook': 'review-body'})
+            review_rating = review.find('span', {'class': 'a-icon-alt'})
+            if review_text and review_rating:
+                reviews.append({
+                    'text': review_text.text.strip(),
+                    'rating': review_rating.text.strip()
+                })
 
     driver.quit()
     return reviews, image_url
