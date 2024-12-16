@@ -23,9 +23,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 app = Flask(__name__)
 
 logging.basicConfig(level=logging.DEBUG)
-def __init__(self):
-        self.ua = UserAgent()
-        self.driver = None
+
     
 # Function to set up the WebDriver using DevTools
 def setup_driver():
@@ -35,7 +33,7 @@ def setup_driver():
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-blink-features=AutomationControlled')
-    options.add_argument(f'user-agent={self.ua.random}')
+    options.add_argument(f"user-agent={get_random_user_agent()}")
 
     service = Service("/usr/bin/chromedriver")  # Path to ChromeDriver
     driver = webdriver.Chrome(service=service, options=options)
