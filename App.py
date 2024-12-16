@@ -23,7 +23,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 app = Flask(__name__)
 
 logging.basicConfig(level=logging.DEBUG)
-
+def __init__(self):
+        self.ua = UserAgent()
+        self.driver = None
+    
 # Function to set up the WebDriver using DevTools
 def setup_driver():
     options = Options()
