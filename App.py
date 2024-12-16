@@ -32,7 +32,7 @@ def setup_driver():
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-blink-features=AutomationControlled')
-    options.add_argument(f"user-agent={get_random_user_agent()}")            
+    options.add_argument(f'user-agent={self.ua.random}')
 
     service = Service("/usr/bin/chromedriver")  # Path to ChromeDriver
     driver = webdriver.Chrome(service=service, options=options)
